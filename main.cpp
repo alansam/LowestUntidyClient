@@ -14,11 +14,12 @@ int main() {
   int i, c = 0, num = 0, oc = 0, sp = 0;
 
   std::vector<unsigned char> indata;
-  while (fin) {
-    fin.get(ch);
-    if (fin.eof()) {
-      break;
-    }
+//  while (fin) {
+//    fin.get(ch);
+//    if (fin.eof()) {
+//      break;
+//    }
+  while (fin.get(ch)) {
     indata.push_back(ch);
     i = ch;
 //    if ((i >= 65 && i <= 90) || (i >= 97 && i <= 122))
