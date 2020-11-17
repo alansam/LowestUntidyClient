@@ -83,6 +83,7 @@ int main() {
           break;
         default:
           cv = ctrl[c_];
+          break;
       }
     }
     else {
