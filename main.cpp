@@ -66,9 +66,11 @@ int main() {
   std::cout << "total: " << chr + num + sp + oc << std::endl;
   std::cout << "input [size " << indata.size() << "]:"
             << std::endl;
+  
   size_t col;
   size_t constexpr col_max(10);
-  std::for_each(indata.begin(), indata.end(), [&col](auto c_) {
+  //  lambda - if you don't like lambdas rework it as a function
+  auto dtl = [&col](auto c_) {
     std::vector<std::string> const ctrl {
     /*  00     01     02     03     04     05     06     07 */
       "NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK", "BEL",
@@ -93,11 +95,23 @@ int main() {
     else {
       cv.push_back(c_);
     }
-    std::cout << std::setw(2)
-              << '\'' << cv << '\''
-              << ((++col % col_max == 0) ? '\n' : ' ');
-  });
+    std::cout << std::setw(7)
+              << ("'" + cv + "'")
+              << ((++col % col_max == 0) ? "\n" : "");
+  };
+
+#define NO_ALGORITHM_ 1
+//#undef NO_ALGORITHM_
+#ifndef NO_ALGORITHM_
+  std::cout << "using range-based for" << '\n';
+  for (auto n_ : indata) {
+    dtl(n_);  //  call the lambda directly
+  }
+#else
+  std::cout << "using std::for_each" << '\n';
+  std::for_each(indata.begin(), indata.end(), dtl);
   std::cout << std::endl;
+#endif
 
   return 0;
 }
