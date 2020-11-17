@@ -11,7 +11,8 @@
 int main() {
   std::ifstream  fin("./Q2input.txt");
   char ch;
-  int i, c = 0, num = 0, oc = 0, sp = 0;
+  int i;
+  int chr = 0, num = 0, oc = 0, sp = 0;
 
   std::vector<unsigned char> indata;
 //  while (fin) {
@@ -25,9 +26,9 @@ int main() {
 //    if ((i >= 65 && i <= 90) || (i >= 97 && i <= 122))
 //    if ((i >= 'A' && i <= 'Z') || (i >= 'a' && i <= 'z')) {
     if (std::isalpha(i)) {
-      c++;
+      chr++;
       std::cout << (unsigned char) i << ' '
-                << c << '\n';
+                << chr << '\n';
     }
 //    else if (i >= 48 && i <= 57)
 //    else if (i >= 48 && i <= 57) {
@@ -45,21 +46,51 @@ int main() {
     else if (std::ispunct(i)) {
       oc++;
     }
+    else if (std::isspace(i)) {
+      sp++;
+    }
   }
 
   std::cout << "The number of characters is "
-            << c << std::endl;
+            << chr << std::endl;
   std::cout << "The number of integer numbers is "
             << num << std::endl;
+  std::cout << "The number of space characters is "
+            << sp << std::endl;
   std::cout << "The number of other characters is "
-            << oc << std::endl; 
-  std::cout << "input:" << std::endl;
+            << oc << std::endl;
+  std::cout << "total: " << chr + num + sp + oc << std::endl;
+  std::cout << "input [size " << indata.size() << "]:"
+            << std::endl;
   size_t col;
-  size_t constexpr col_max(32);
+  size_t constexpr col_max(10);
   std::for_each(indata.begin(), indata.end(), [&col](auto c_) {
+    std::vector<std::string> const ctrl {
+    /*  00     01     02     03     04     05     06     07 */
+      "NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK", "BEL",
+    /*  08     09     0a     0b     0c     0d     0e.    0f */
+       "BS",  "HT",  "LF",  "VT",  "FF",  "CR",   "SO", "SI",
+    /*  10     11     12     13     14     15.    16.    17 */
+      "DLE", "DC1", "DC2", "DC3", "DC4", "NAK", "SYN", "ETB",
+    /*  18     19     1a     1b     1c     1d     1e     1f */
+      "CAN",  "EM", "SUB", "ESC"   "FS",  "GS",  "RS",  "US",
+    };
+    std::string cv;
+    if (std::iscntrl(c_)) {
+      switch (c_) {
+        case 0x7f:
+          cv = "DEL";
+          break;
+        default:
+          cv = ctrl[c_];
+      }
+    }
+    else {
+      cv.push_back(c_);
+    }
     std::cout << std::setw(2)
-              << c_ 
-              << ((++col % col_max == 0) ? "\n" : "");
+              << '\'' << cv << '\''
+              << ((++col % col_max == 0) ? '\n' : ' ');
   });
   std::cout << std::endl;
 
