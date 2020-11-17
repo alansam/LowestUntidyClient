@@ -11,8 +11,8 @@
 int main() {
   std::ifstream  fin("./Q2input.txt");
   char ch;
-  int i;
-  int chr = 0, num = 0, oc = 0, sp = 0;
+  int ic;
+  int chr(0), num(0), oc(0), sp(0), ct(0);
 
   std::vector<unsigned char> indata;
 //  while (fin) {
@@ -22,10 +22,11 @@ int main() {
 //    }
   while (fin.get(ch)) {
     indata.push_back(ch);
-    i = ch;
+    ic = ch;
 //    if ((i >= 65 && i <= 90) || (i >= 97 && i <= 122))
 //    if ((i >= 'A' && i <= 'Z') || (i >= 'a' && i <= 'z')) {
-    if (std::isalpha(i)) {
+    if (std::isalpha(ic)) {
+      /* 'A' [0x41] - 'Z' [0x5a], 'a' [0x61] - 'z' [0x7a] */
       chr++;
 #define NDEBUG 1
 //#undef NDEBUG
@@ -36,7 +37,8 @@ int main() {
     }
 //    else if (i >= 48 && i <= 57)
 //    else if (i >= 48 && i <= 57) {
-    else if (std::isdigit(i)) {
+    else if (std::isdigit(ic)) {
+      /* '0' [0x30] - '9 [0x39] */
       num++;
     }
 //    else if ((i >= 33 && i <= 47)
@@ -47,23 +49,32 @@ int main() {
 //          || (i >= 0x3A && i <= 0x40)   /* : - @ */
 //          || (i >= 0x5b && i <= 0x60)   /* [ - ` */
 //          || (i >= 0x7b && i <= 0x7e))  /* { - ~ */ {
-    else if (std::ispunct(i)) {
+    else if (std::ispunct(ic)) {
+      /*    ! -    /,    : -    @,    [ -    `,    { -    ~ */
+      /* 0x21 - 0x2f, 0x3a - 0x40, 0x58 - 0x60, 0x78 - 0x7e */
       oc++;
     }
-    else if (std::isspace(i)) {
+    else if (std::isblank(ic)) {
+      /* ' ' (SP, 0x20) & '\t' (HT, 0x09) */
       sp++;
+    }
+    else if (std::iscntrl(ic)) {
+      /* 0x00 - 0x1f & 0x7f */
+      ct++;
     }
   }
 
-  std::cout << "The number of characters is "
+  std::cout << "The number of alphabetic characters is "
             << chr << std::endl;
-  std::cout << "The number of integer numbers is "
+  std::cout << "The number of digit characters is "
             << num << std::endl;
   std::cout << "The number of space characters is "
             << sp << std::endl;
-  std::cout << "The number of other characters is "
+  std::cout << "The number of punctuation characters is "
             << oc << std::endl;
-  std::cout << "total: " << chr + num + sp + oc << std::endl;
+  std::cout << "The number of control characters is "
+            << ct << std::endl;
+  std::cout << "total: " << chr + num + sp + oc + ct << std::endl;
   std::cout << "input [size " << indata.size() << "]:"
             << std::endl;
   
@@ -75,7 +86,7 @@ int main() {
     /*  00     01     02     03     04     05     06     07 */
       "NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK", "BEL",
     /*  08     09     0a     0b     0c     0d     0e.    0f */
-       "BS",  "HT",  "LF",  "VT",  "FF",  "CR",   "SO", "SI",
+       "BS",  "HT",  "LF",  "VT",  "FF",  "CR",  "SO",  "SI",
     /*  10     11     12     13     14     15.    16.    17 */
       "DLE", "DC1", "DC2", "DC3", "DC4", "NAK", "SYN", "ETB",
     /*  18     19     1a     1b     1c     1d     1e     1f */
