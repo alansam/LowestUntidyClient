@@ -27,8 +27,12 @@ int main() {
 //    if ((i >= 'A' && i <= 'Z') || (i >= 'a' && i <= 'z')) {
     if (std::isalpha(i)) {
       chr++;
+#define NDEBUG 1
+//#undef NDEBUG
+#ifndef NDEBUG
       std::cout << (unsigned char) i << ' '
                 << chr << '\n';
+#endif
     }
 //    else if (i >= 48 && i <= 57)
 //    else if (i >= 48 && i <= 57) {
