@@ -120,9 +120,11 @@ int main() {
   }
 #else
   std::cout << "using std::for_each" << '\n';
+  col = 0;
   std::for_each(indata.begin(), indata.end(), dtl);
   std::cout << std::endl;
 #endif
 
   return 0;
 }
+
